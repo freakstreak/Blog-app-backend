@@ -1,0 +1,57 @@
+table:
+  name: blogs
+  schema: public
+object_relationships:
+  - name: user
+    using:
+      manual_configuration:
+        column_mapping:
+          userId: id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        userId:
+          _eq: X-Hasura-User-Id
+      set:
+        userId: x-hasura-User-Id
+      columns:
+        - body
+        - id
+        - title
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - userId
+        - body
+        - cover
+        - title
+      filter:
+        _or:
+          - userId:
+              _eq: x-hasura-user-id
+          - userId:
+              _neq: x-hasura-user-id
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - body
+        - id
+        - title
+      filter:
+        userId:
+          _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        userId:
+          _eq: X-Hasura-User-Id

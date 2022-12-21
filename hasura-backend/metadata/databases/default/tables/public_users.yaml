@@ -1,0 +1,41 @@
+table:
+  name: users
+  schema: public
+array_relationships:
+  - name: blogs
+    using:
+      manual_configuration:
+        column_mapping:
+          id: userId
+        insertion_order: null
+        remote_table:
+          name: blogs
+          schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+        - id
+        - firstName
+        - lastName
+        - email
+        - password
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - email
+        - firstName
+        - lastName
+        - password
+      filter: {}
+update_permissions:
+  - role: user
+    permission:
+      columns: []
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null
